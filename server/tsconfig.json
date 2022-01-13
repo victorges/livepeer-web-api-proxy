@@ -5,7 +5,7 @@
     "outDir": "../dist/server",
     "allowJs": false,
     "esModuleInterop": true,
-    "sourceRoot": "../../server/src",
+    "sourceRoot": "src",
     "sourceMap": true,
     "target": "es2020",
     "module": "commonjs",
