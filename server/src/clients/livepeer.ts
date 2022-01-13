@@ -10,6 +10,7 @@ export interface TranscodingProfile {
 
 export interface Stream {
   id: string
+  name: string
   createdAt: number
   createdByTokenName: string
   isActive: boolean
@@ -41,7 +42,8 @@ export const streamUrl = (streamKey: string) =>
   `rtmp://rtmp.livepeer.com/live/${streamKey}`
 
 export const extractStreamKey = (streamUrl: string) => {
-  const matches = /rtmp:\/\/rtmp\.livepeer\.com\/live\/(.+)/.exec(streamUrl) ?? []
+  const matches =
+    /rtmp:\/\/rtmp\.livepeer\.com\/live\/(.+)/.exec(streamUrl) ?? []
   return matches.length > 0 ? matches[1] : undefined
 }
 
@@ -61,6 +63,9 @@ export class API {
 
   async getStream(id: string) {
     const response = await this.http.get<Stream>(`/stream/${id}`)
+    if (response.status !== 200) {
+      return null
+    }
     return response.data
   }
 
@@ -70,6 +75,9 @@ export class API {
       profiles: defaultProfiles,
     }
     const response = await this.http.post<Stream>('/stream', payload)
+    if (response.status >= 300) {
+      throw new Error('Error creating stream: ' + response.statusText)
+    }
     return response.data
   }
 }

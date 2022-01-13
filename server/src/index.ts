@@ -11,8 +11,6 @@ app.use(cookieParser())
 import * as handlers from './handlers'
 
 app.use('/api', handlers.api)
-app.use('/', handlers.websocket)
-app.use('/', handlers.files)
 
 const port = process.env.PORT || 8080
 app.listen(port, () => {

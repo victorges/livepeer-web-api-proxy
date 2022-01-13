@@ -1,38 +1,56 @@
 import * as livepeer from './livepeer'
-import streamstore, { StreamInfo } from './streamstore'
 
-import { uniqueNamesGenerator, adjectives, animals, names } from 'unique-names-generator'
+import {
+  uniqueNamesGenerator,
+  colors,
+  adjectives,
+  animals,
+} from 'unique-names-generator'
+
+export interface StreamInfo {
+  humanId: string
+  streamId: string
+  streamKey?: string
+  streamUrl: string
+  playbackId: string
+  playbackUrl: string
+  stream?: livepeer.Stream
+}
 
 const livepeerApi = new livepeer.API()
 
 const hidConfig = {
-  dictionaries: [adjectives, animals, names],
+  dictionaries: [colors, adjectives, animals],
   separator: '-',
 }
 const humanIdGen = () => uniqueNamesGenerator(hidConfig).toLowerCase()
 
-const streamToInfo = (humanId: string, stream: livepeer.Stream): StreamInfo => ({
+const streamToInfo = (
+  humanId: string,
+  stream: livepeer.Stream
+): StreamInfo => ({
   humanId,
   streamId: stream.id,
   streamKey: stream.streamKey,
   streamUrl: livepeer.streamUrl(stream.streamKey),
   playbackId: stream.playbackId,
   playbackUrl: livepeer.playbackUrl(stream.playbackId),
-  stream: stream
+  stream: stream,
 })
 
-export async function getOrCreateStream(prevStreamId?: string): Promise<StreamInfo> {
+const trimPrefix = (str: string, prefix: string) =>
+  str.startsWith(prefix) ? str.substring(prefix.length) : str
+
+export async function getOrCreateStream(
+  prevStreamId?: string
+): Promise<StreamInfo> {
   if (prevStreamId) {
-    const info = await streamstore.getByStreamId(prevStreamId)
-    if (info) return info
+    const stream = await livepeerApi.getStream(prevStreamId)
+    if (stream) {
+      return streamToInfo(trimPrefix(stream.name, 'web-'), stream)
+    }
   }
-
   const humanId = humanIdGen()
-  const stream = prevStreamId
-    ? await livepeerApi.getStream(prevStreamId)
-    : await livepeerApi.createStream(`justcast-it-${humanId}`)
-
-  const info = streamToInfo(humanId, stream)
-  await streamstore.create(info)
-  return info
+  const stream = await livepeerApi.createStream(`web-${humanId}`)
+  return streamToInfo(humanId, stream)
 }
