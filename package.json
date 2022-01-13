@@ -7,11 +7,13 @@
   "scripts": {
     "start": "cd server && yarn start",
     "start:prod": "NODE_ENV=production node dist/server/index.js",
-    "deploy": "flyctl deploy",
+    "flyctl": "run-s flyctl:launch flyctl:api-key",
+    "flyctl:launch": "flyctl deploy",
+    "flyctl:api-key": "./set-api-key.sh",
+    "flyctl:deploy": "flyctl deploy",
     "clean": "rm -rf dist",
     "build": "cd server && yarn build",
     "watch": "cd server && yarn watch",
-    "prepare": "run-s clean build",
     "docker": "run-s docker:build docker:start",
     "docker:build": "docker build -t lp-webapi-proxy .",
     "docker:start": "docker run -it --rm -p 8080:8080 --name lp-webapi-proxy lp-webapi-proxy"

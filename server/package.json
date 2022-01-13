@@ -6,7 +6,7 @@
   "main": "src/index.ts",
   "scripts": {
     "start": "cd .. && ts-node server/src/index.ts",
-    "build": "tsc",
+    "build": "tsc src/index.ts",
     "watch": "cd .. && ts-node-dev --project server/tsconfig.json server/src/index.ts"
   },
   "engines": {
