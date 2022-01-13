@@ -13,7 +13,7 @@
     "watch": "cd server && yarn watch",
     "prepare": "run-s clean build",
     "docker": "run-s docker:build docker:start",
-    "docker:build": "docker build --progress=plain -t lp-webapi-proxy .",
+    "docker:build": "docker build -t lp-webapi-proxy .",
     "docker:start": "docker run -it --rm -p 8080:8080 --name lp-webapi-proxy lp-webapi-proxy"
   },
   "workspaces": [

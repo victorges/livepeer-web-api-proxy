@@ -1,6 +1,4 @@
-# fly.toml file generated for winter-frog-6632 on 2021-09-06T11:46:29-03:00
-
-app = "winter-frog-6632"
+app = "livepeer-web-api-proxy"
 
 kill_signal = "SIGINT"
 kill_timeout = 10
