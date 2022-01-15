@@ -49,5 +49,5 @@ certainly require changing how it works.
 
 For example you might want to increment the API proxy logic to have some kind of 
 token-gating for who could get a stream key or not. You can adapt the logic from
-this other token-gating logic to only create streams for users with allowed Ethereum
+this other token-gating project to only create streams for users with allowed Ethereum
 addresses: https://github.com/livepeer/livepeer-nft-gate-example
